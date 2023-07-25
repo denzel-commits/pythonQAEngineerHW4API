@@ -3,8 +3,8 @@ import os
 
 
 def pytest_addoption(parser):
-    parser.addoption("--url", default="https://ya.ru")
-    parser.addoption("--status_code", default="200")
+    parser.addoption("--url", default="https://ya.ru", help="URL address")
+    parser.addoption("--status_code", default="200", help="Expected HTTP response status code")
 
 
 def pytest_configure(config):
