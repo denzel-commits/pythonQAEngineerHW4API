@@ -21,6 +21,10 @@ def request_sub_breeds(breed):
     return requests.get(f"{DOG_API_URL}/breed/{breed}/list")
 
 
+def request_sub_breeds_rnd(breed, subbreed, number):
+    return requests.get(f"{DOG_API_URL}/breed/{breed}/{subbreed}/images/random/{number}")
+
+
 @pytest.fixture()
 def get_by_breed():
     return request_by_breed
@@ -34,3 +38,8 @@ def get_by_breed_rnd():
 @pytest.fixture()
 def get_sub_breeds():
     return request_sub_breeds
+
+
+@pytest.fixture()
+def get_sub_breeds_rnd():
+    return request_sub_breeds_rnd

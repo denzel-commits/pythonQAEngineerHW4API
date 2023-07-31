@@ -63,7 +63,7 @@ def test_list_sub_breeds(get_sub_breeds, schema, status_code, status, breed):
     (Images, 200, "success", "cattledog", "australian", 4),
     (Images, 200, "success", "corgi", "cardigan", 10),
 ])
-def test_by_breed_rnd(get_sub_breeds_rnd, schema, status_code, status, breed, subbreed, number):
+def test_sub_breeds_rnd(get_sub_breeds_rnd, schema, status_code, status, breed, subbreed, number):
     result = BaseResponse(get_sub_breeds_rnd(breed, subbreed, number))\
         .assert_status_code(status_code) \
         .validate(schema)
