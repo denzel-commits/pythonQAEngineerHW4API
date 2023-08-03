@@ -1,5 +1,7 @@
+import csv
 import requests
-from configuration import OPEN_BREWERY_API_URL
+
+from configuration import PROJECT_ROOT, OPEN_BREWERY_API_URL
 
 
 def get_test_data(count=10):
@@ -17,3 +19,14 @@ def inject_test_data_ids(count=10):
     return [(test_data["brewery_ids"][i], test_data["brewery_ids"][i + 1])
             for i in range(0, len(test_data["brewery_ids"]), 2)
             ]
+
+
+def inject_test_data_id_name(file):
+    data_list = []
+    with open(PROJECT_ROOT+"/"+file, "r", newline="") as csvfile:
+        csv_reader = csv.reader(csvfile)
+        next(csv_reader)
+        for row in csv_reader:
+            data_list.append(tuple(row))
+
+    return data_list
