@@ -6,67 +6,67 @@ from src.pydantic_schemas.dogs_api.images import Images
 from src.pydantic_schemas.dogs_api.subbreeds import SubBreeds
 
 
-@pytest.mark.parametrize("schema, status_code, status", [(Breeds, 200, "success")])
-def test_list_breeds(get_breeds, schema, status_code, status):
+@pytest.mark.parametrize("status", ["success"])
+def test_list_breeds(get_breeds, status):
     result = BaseResponse(get_breeds)\
-        .assert_status_code(status_code) \
-        .validate(schema)
+        .assert_status_code(200) \
+        .validate(Breeds)
 
     assert result.response_json["status"] == status
 
 
-@pytest.mark.parametrize("schema, status_code, status, breed", [
-    (Images, 200, "success", "hound"),
-    (Images, 200, "success", "bulldog"),
-    (Images, 200, "success", "cattledog"),
-    (Images, 200, "success", "corgi"),
+@pytest.mark.parametrize("breed, status", [
+    ("hound", "success"),
+    ("bulldog", "success"),
+    ("cattledog", "success"),
+    ("corgi", "success"),
 ])
-def test_by_breed(get_by_breed, schema, status_code, status, breed):
+def test_by_breed(breed, status, get_by_breed):
     result = BaseResponse(get_by_breed(breed))\
-        .assert_status_code(status_code) \
-        .validate(schema)
+        .assert_status_code(200) \
+        .validate(Images)
 
     assert result.response_json["status"] == status
 
 
-@pytest.mark.parametrize("schema, status_code, status, breed, number", [
-    (Images, 200, "success", "hound", 3),
-    (Images, 200, "success", "bulldog", 1),
-    (Images, 200, "success", "cattledog", 4),
-    (Images, 200, "success", "corgi", 10),
-])
-def test_by_breed_rnd(get_by_breed_rnd, schema, status_code, status, breed, number):
+@pytest.mark.parametrize("breed, number, status", [
+                             ("hound", 3, "success"),
+                             ("bulldog", 1, "success"),
+                             ("cattledog", 4, "success"),
+                             ("corgi", 10, "success"),
+                         ])
+def test_by_breed_rnd(breed, number, status, get_by_breed_rnd):
     result = BaseResponse(get_by_breed_rnd(breed, number))\
-        .assert_status_code(status_code) \
-        .validate(schema)
+        .assert_status_code(200) \
+        .validate(Images)
 
     assert result.response_json["status"] == status
 
 
-@pytest.mark.parametrize("schema, status_code, status, breed", [
-    (SubBreeds, 200, "success", "hound"),
-    (SubBreeds, 200, "success", "bulldog"),
-    (SubBreeds, 200, "success", "cattledog"),
-    (SubBreeds, 200, "success", "corgi"),
+@pytest.mark.parametrize("breed, status", [
+    ("hound", "success"),
+    ("bulldog", "success"),
+    ("cattledog", "success"),
+    ("corgi", "success"),
 ])
-def test_list_sub_breeds(get_sub_breeds, schema, status_code, status, breed):
+def test_list_sub_breeds(status, breed, get_sub_breeds):
     result = BaseResponse(get_sub_breeds(breed))\
-        .assert_status_code(status_code) \
-        .validate(schema)
+        .assert_status_code(200) \
+        .validate(SubBreeds)
 
     assert result.response_json["status"] == status
 
 
-@pytest.mark.parametrize("schema, status_code, status, breed, subbreed, number", [
-    (Images, 200, "success", "hound", "afghan", 3),
-    (Images, 200, "success", "bulldog", "french", 1),
-    (Images, 200, "success", "cattledog", "australian", 4),
-    (Images, 200, "success", "corgi", "cardigan", 10),
+@pytest.mark.parametrize("breed, subbreed, number, status", [
+    ("hound", "afghan", 3, "success"),
+    ("bulldog", "french", 1, "success"),
+    ("cattledog", "australian", 4, "success"),
+    ("corgi", "cardigan", 10, "success"),
 ])
-def test_sub_breeds_rnd(get_sub_breeds_rnd, schema, status_code, status, breed, subbreed, number):
+def test_sub_breeds_rnd(breed, subbreed, number, status, get_sub_breeds_rnd):
     result = BaseResponse(get_sub_breeds_rnd(breed, subbreed, number))\
-        .assert_status_code(status_code) \
-        .validate(schema)
+        .assert_status_code(200) \
+        .validate(Images)
 
     assert result.response_json["status"] == status
     
