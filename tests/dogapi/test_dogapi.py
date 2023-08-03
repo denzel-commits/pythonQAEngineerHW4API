@@ -1,9 +1,9 @@
 import pytest
 
 from src.baseclasses.baseresponse import BaseResponse
-from src.pydantic_schemas.breeds import Breeds
-from src.pydantic_schemas.images import Images
-from src.pydantic_schemas.subbreeds import SubBreeds
+from src.pydantic_schemas.dogs_api.breeds import Breeds
+from src.pydantic_schemas.dogs_api.images import Images
+from src.pydantic_schemas.dogs_api.subbreeds import SubBreeds
 
 
 @pytest.mark.parametrize("schema, status_code, status", [(Breeds, 200, "success")])
@@ -69,3 +69,4 @@ def test_sub_breeds_rnd(get_sub_breeds_rnd, schema, status_code, status, breed, 
         .validate(schema)
 
     assert result.response_json["status"] == status
+    
