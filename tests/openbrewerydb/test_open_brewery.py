@@ -1,9 +1,8 @@
 import pytest
 
 from src.baseclasses.baseresponse import BaseResponse
-from src.pydantic_schemas.openbrewery_api.brewery import Brewery
-
 from src.enums.openbrewery_api.brewery_type import BreweryType
+from src.pydantic_schemas.openbrewery_api.brewery import Brewery
 from src.utils.brewery_utils import get_test_data, inject_test_data_ids, inject_test_data_id_name
 
 
@@ -33,3 +32,11 @@ class TestOpenBrewery:
     @pytest.mark.parametrize("brewery_type", [*BreweryType.list()])
     def test_brewery_by_type(self, brewery_type, get_brewery_by_type):
         BaseResponse(get_brewery_by_type(brewery_type)).assert_status_code(200).validate(Brewery)
+
+    @pytest.mark.parametrize("brewery_type", ["macro", "mini"])
+    def test_brewery_by_type_invalid(self, brewery_type, get_brewery_by_type):
+        result = BaseResponse(get_brewery_by_type(brewery_type)).assert_status_code(400)
+        assert "errors" in result.response_json
+        assert result.response_json == {'errors': ['Brewery type must include one of these types: '
+                                                   '["micro", "nano", "regional", "brewpub", "large", '
+                                                   '"planning", "bar", "contract", "proprietor", "closed"]']}

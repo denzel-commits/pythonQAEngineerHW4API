@@ -8,12 +8,12 @@ def brewery_single_by_id(id_):
 
 
 def brewery_by_ids(ids):
-    params = {"ids": ids}
+    params = {"by_ids": ids}
     return requests.get(f"{OPEN_BREWERY_API_URL}/breweries", params=params)
 
 
 def brewery_by_type(brewery_type):
-    params = {"brewery_type": brewery_type}
+    params = {"by_type": brewery_type}
     return requests.get(f"{OPEN_BREWERY_API_URL}/breweries", params=params)
 
 
