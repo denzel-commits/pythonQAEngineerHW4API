@@ -1,19 +1,20 @@
 import requests
 import pytest
 from configuration import JSON_PLACEHOLDER_API_URL
+from src.baseclasses.baserequest import BaseRequest
 
 
-def post_by_id(id_):
-    return requests.get(JSON_PLACEHOLDER_API_URL + f"/posts/{id_}")
+def post_by_id(id_, expected_error=False):
+    return BaseRequest(JSON_PLACEHOLDER_API_URL).get("posts", id_, expected_error=expected_error)
 
 
 def filter_by_userid(userid):
-    return requests.get(JSON_PLACEHOLDER_API_URL + f"/posts?userId={userid}")
+    return BaseRequest(JSON_PLACEHOLDER_API_URL).get(f"posts?userId={userid}")
 
 
 @pytest.fixture()
 def get_posts():
-    return requests.get(JSON_PLACEHOLDER_API_URL + "/posts")
+    return BaseRequest(JSON_PLACEHOLDER_API_URL).get("posts")
 
 
 @pytest.fixture()
@@ -37,8 +38,7 @@ def create_post_data(request):
 
 @pytest.fixture()
 def create_post_request(create_post_data):
-    headers = {'Content-type': 'application/json; charset=UTF-8'}
-    return requests.post(JSON_PLACEHOLDER_API_URL + "/posts", json=create_post_data, headers=headers)
+    return BaseRequest(JSON_PLACEHOLDER_API_URL).post("posts", body=create_post_data)
 
 
 @pytest.fixture()
@@ -53,12 +53,11 @@ def update_post_data(request):
 
 @pytest.fixture()
 def update_post_request(update_post_data):
-    headers = {'Content-type': 'application/json; charset=UTF-8'}
-    return requests.put(JSON_PLACEHOLDER_API_URL + f"/posts/{update_post_data['id']}", json=update_post_data,
-                        headers=headers)
+    return BaseRequest(JSON_PLACEHOLDER_API_URL).put("posts", endpoint_id=update_post_data['id'], body=update_post_data)
+    # return requests.put(JSON_PLACEHOLDER_API_URL + f"/posts/{update_post_data['id']}", json=update_post_data)
 
 
 @pytest.fixture()
 def delete_post_request(request):
-    headers = {'Content-type': 'application/json; charset=UTF-8'}
-    return requests.delete(JSON_PLACEHOLDER_API_URL + f"/posts/{request.param}", headers=headers)
+    return BaseRequest(JSON_PLACEHOLDER_API_URL).delete("posts", endpoint_id=request.param)
+    # return requests.delete(JSON_PLACEHOLDER_API_URL + f"/posts/{request.param}")

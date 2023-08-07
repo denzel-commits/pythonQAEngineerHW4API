@@ -1,18 +1,23 @@
 import requests
+from src.baseclasses.baseresponse import BaseResponse
 
 
 class BaseRequest:
     def __init__(self, base_url):
         self.base_url = base_url
 
-    def _request(self, url, request_type, data=None, expected_error=False):
+    def _request(self, url, request_type, json=None, expected_error=False):
         stop_flag = False
         while not stop_flag:
             if request_type == "GET":
                 response = requests.get(url)
             elif request_type == "POST":
-                response = requests.post(url, data=data)
-            else:
+                response = requests.post(url, json=json)
+            elif request_type == "PUT":
+                response = requests.put(url, json=json)
+            elif request_type == "PATCH":
+                response = requests.patch(url, json=json)
+            elif request_type == "DELETE":
                 response = requests.delete(url)
 
             if not expected_error and response.ok:
@@ -20,19 +25,28 @@ class BaseRequest:
             elif expected_error:
                 stop_flag = True
 
-        return response
+        return BaseResponse(response)
 
-    def get(self, endpoint, endpoint_id, expected_error):
-        url = f"{self.base_url}/{endpoint}/{endpoint_id}"
-        response = self._request(url, "GET", expected_error=expected_error)
-        return response.json()
+    def get(self, endpoint, endpoint_id=None, expected_error=False):
+        if endpoint_id is None:
+            url = f"{self.base_url}/{endpoint}"
+        else:
+            url = f"{self.base_url}/{endpoint}/{endpoint_id}"
 
-    def post(self, endpoint, endpoint_id, body):
+        return self._request(url, "GET", expected_error=expected_error)
+
+    def post(self, endpoint, body, endpoint_id=""):
         url = f"{self.base_url}/{endpoint}/{endpoint_id}"
-        response = self._request(url, "POST", data=body)
-        return response.json()["message"]
+        return self._request(url, "POST", json=body)
+
+    def put(self, endpoint, body, endpoint_id=""):
+        url = f"{self.base_url}/{endpoint}/{endpoint_id}"
+        return self._request(url, "PUT", json=body)
+
+    def patch(self, endpoint, body, endpoint_id=""):
+        url = f"{self.base_url}/{endpoint}/{endpoint_id}"
+        return self._request(url, "PATCH", json=body)
 
     def delete(self, endpoint, endpoint_id):
         url = f"{self.base_url}/{endpoint}/{endpoint_id}"
-        response = self._request(url, "DELETE")
-        return response.json()["message"]
+        return self._request(url, "DELETE")
