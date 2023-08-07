@@ -27,11 +27,6 @@ def filter_posts_by_userid():
 
 
 @pytest.fixture()
-def filter_posts_by_userid():
-    return filter_by_userid
-
-
-@pytest.fixture()
 def create_post_data(request):
     post_data = request.param
     return {"title": post_data["title"],

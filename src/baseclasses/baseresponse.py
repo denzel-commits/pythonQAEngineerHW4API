@@ -24,4 +24,3 @@ class BaseResponse:
         return f"\nStatus code: {self.response_status} \n" \
                f"Requested url: {self.response.url} \n" \
                f"Response body: {self.response_json}"
-

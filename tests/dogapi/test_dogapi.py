@@ -66,4 +66,3 @@ class TestDogApi:
             .validate(Images)
 
         assert result.response_json["status"] == status
-    
