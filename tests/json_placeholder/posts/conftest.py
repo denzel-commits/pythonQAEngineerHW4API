@@ -54,10 +54,8 @@ def update_post_data(request):
 @pytest.fixture()
 def update_post_request(update_post_data):
     return BaseRequest(JSON_PLACEHOLDER_API_URL).put("posts", endpoint_id=update_post_data['id'], body=update_post_data)
-    # return requests.put(JSON_PLACEHOLDER_API_URL + f"/posts/{update_post_data['id']}", json=update_post_data)
 
 
 @pytest.fixture()
 def delete_post_request(request):
     return BaseRequest(JSON_PLACEHOLDER_API_URL).delete("posts", endpoint_id=request.param)
-    # return requests.delete(JSON_PLACEHOLDER_API_URL + f"/posts/{request.param}")
