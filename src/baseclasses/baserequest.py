@@ -1,4 +1,5 @@
 import requests
+import time
 from src.baseclasses.baseresponse import BaseResponse
 
 
@@ -8,7 +9,13 @@ class BaseRequest:
 
     def _request(self, url, request_type, json=None, expected_error=False):
         stop_flag = False
+        max_retries = 3
+        attempt = 0
+        retry_delay_secs = 3
+
         while not stop_flag:
+            attempt += 1
+
             if request_type == "GET":
                 response = requests.get(url)
             elif request_type == "POST":
@@ -24,6 +31,11 @@ class BaseRequest:
                 stop_flag = True
             elif expected_error:
                 stop_flag = True
+            elif attempt >= max_retries:
+                stop_flag = True
+
+            if not stop_flag:
+                time.sleep(retry_delay_secs)
 
         return BaseResponse(response)
 

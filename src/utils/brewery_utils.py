@@ -1,7 +1,8 @@
+from os import path
 import csv
 import requests
 
-from configuration import PROJECT_ROOT, OPEN_BREWERY_API_URL
+from configuration import TEST_DATA_PATH, OPEN_BREWERY_API_URL
 
 
 def get_test_data(count=10):
@@ -23,7 +24,7 @@ def inject_test_data_ids(count=10):
 
 def inject_test_data_id_name(file):
     data_list = []
-    with open(PROJECT_ROOT+"/"+file, "r", newline="") as csvfile:
+    with open(path.join(TEST_DATA_PATH, file), "r", newline="") as csvfile:
         csv_reader = csv.reader(csvfile)
         next(csv_reader)
         for row in csv_reader:

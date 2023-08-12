@@ -9,7 +9,7 @@ from src.utils.brewery_utils import get_test_data, inject_test_data_ids, inject_
 class TestOpenBrewery:
     test_data = get_test_data(count=20)
     test_data_ids = inject_test_data_ids(count=20)
-    test_data_id_name = inject_test_data_id_name("src/test_data/openbrewery_id_name.csv")
+    test_data_id_name = inject_test_data_id_name("openbrewery_id_name.csv")
 
     @pytest.mark.parametrize("id_", test_data["brewery_ids"])
     def test_single_brewery(self, id_, get_single_brewery):
@@ -31,7 +31,13 @@ class TestOpenBrewery:
 
     @pytest.mark.parametrize("brewery_type", [*BreweryType.list()])
     def test_brewery_by_type(self, brewery_type, get_brewery_by_type):
-        BaseResponse(get_brewery_by_type(brewery_type)).assert_status_code(200).validate(Brewery)
+        breweries = BaseResponse(get_brewery_by_type(brewery_type)).assert_status_code(200).validate(Brewery)
+
+        if isinstance(breweries.response_json, list):
+            for brewery in breweries.response_json:
+                assert brewery.get("brewery_type") == brewery_type
+        else:
+            assert breweries.get("brewery_type") == brewery_type
 
     @pytest.mark.parametrize("brewery_type", ["macro", "mini"])
     def test_brewery_by_type_invalid(self, brewery_type, get_brewery_by_type):
